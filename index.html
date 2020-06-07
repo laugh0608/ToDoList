@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>ToDoList</title>
+		<link rel="stylesheet" type="text/css" href="css/animate.min.css"/>
+		<script src="js/vue.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div id="app">
+			<input type="text" v-model="inputValue" @keydown.enter="enterEvent" name="" id="" value="" />
+			<div id="">
+				<h2>正在进行</h2>
+				<transition-group name="slide" enter-active-class="animated bounceInLeft" leave-active-class="animated bounceOutRight">
+				<div id="" v-for="item,index in doingList" :key="'doing'+index">
+					<input @click.prevent="checkDone(item.id)" type="checkbox" name="" id="" value="" />
+					<h3>{{item.content}}</h3>
+					<div id="" @click="deleteItem(item.id)">删除</div>
+				</div>
+				</transition-group>
+			</div>
+			<div id="">
+				<h2>已经完成</h2>
+				<transition-group name="slide" enter-active-class="animated bounceInLeft" leave-active-class="animated bounceOutRight">
+				<div id="" v-for="item,index in doneList" :key="'done'+index">
+					<input type="checkbox" @click.prevent="checkDone(item.id)" name="" id="" value="" checked="checked"/>
+					<h3>{{item.content}}</h3>
+					<div id="" @click="deleteItem(item.id)">删除</div>
+				</div>
+				</transition-group>
+			</div>
+		</div>
+		<script type="text/javascript">
+			var app = new Vue({
+				el:'#app',
+				data:{
+					todoList:[],
+					inputValue:"",
+				},
+				computed:{
+					doingList:function(){
+						let arr = this.todoList.filter(function(item,index){
+							return !item.isDone
+						});
+						return arr;
+					},
+					doneList:function(){
+						let arr = this.todoList.filter(function(item,index){
+							return item.isDone
+						});
+						return arr;
+					}
+				},
+				methods:{
+					enterEvent:function(event){
+						this.todoList.push({
+							content:this.inputValue,
+							isDone:false,
+							id:this.todoList.length
+						});
+						// 保存数据
+						this.savaData();
+						// 清空输入框
+						this.inputValue = "";
+					},
+					savaData:function(){
+						localStorage.todoList = JSON.stringify(this.todoList);
+					},
+					checkDone:function(id){
+						this.todoList[id].isDone = !this.todoList[id].isDone;
+						// 每次修改都必须保存
+						this.savaData();
+					},
+					deleteItem:function(id){
+						this.todoList.splice(id,1);
+						this.todoList.forEach(function(item,i){
+							item.id = i;
+						});
+						this.savaData();
+					}
+				},
+				mounted:function(){
+					this.todoList = localStorage.todoList?JSON.parse(localStorage.todoList):[];
+				}
+			})
+		</script>
+	</body>
+</html>
