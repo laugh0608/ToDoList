@@ -12,20 +12,20 @@
 			<div id="">
 				<h2>正在进行</h2>
 				<transition-group name="slide" enter-active-class="animated bounceInLeft" leave-active-class="animated bounceOutRight">
-				<div id="" v-for="item,index in doingList" :key="'doing'+index">
-					<input @click.prevent="checkDone(item.id)" type="checkbox" name="" id="" value="" />
+				<div v-for="(item,index) in doingList" :key="'doing'+index">
+					<input @click.prevent="checkDone(item.id)" type="checkbox"/>
 					<h3>{{item.content}}</h3>
-					<div id="" @click="deleteItem(item.id)">删除</div>
+					<div @click="deleteItem(item.id)">删除</div>
 				</div>
 				</transition-group>
 			</div>
 			<div id="">
 				<h2>已经完成</h2>
 				<transition-group name="slide" enter-active-class="animated bounceInLeft" leave-active-class="animated bounceOutRight">
-				<div id="" v-for="item,index in doneList" :key="'done'+index">
-					<input type="checkbox" @click.prevent="checkDone(item.id)" name="" id="" value="" checked="checked"/>
+				<div v-for="(item,index) in doneList" :key="'done'+index">
+					<input type="checkbox" @click.prevent="checkDone(item.id)" checked="checked"/>
 					<h3>{{item.content}}</h3>
-					<div id="" @click="deleteItem(item.id)">删除</div>
+					<div @click="deleteItem(item.id)">删除</div>
 				</div>
 				</transition-group>
 			</div>
